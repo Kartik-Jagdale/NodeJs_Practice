@@ -19,14 +19,12 @@ exports.postAddHome = (req, res, next) => {
     });
 }
 
-exports.getHostHome = (req, res, next) => {
-
-    const registeredHomes = Home.fetchAll()
-        res.render('host/host-home-list', {
-            registeredHomes: registeredHomes,
-            pageTitle: 'airbnb Home',
-            currentPage: 'Home'
-        });
-
-
-}
+exports.getHostHomes = (req, res, next) => {
+    Home.fetchAll((registeredHomes) =>
+      res.render("host/host-home-list", {
+        registeredHomes: registeredHomes,
+        pageTitle: "Host Homes List",
+        currentPage: "host-homes",
+      })
+    );
+  };
