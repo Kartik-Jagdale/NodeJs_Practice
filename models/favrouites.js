@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const rootDir = require("../utils/pathUtil");
-const { error } = require("console");
 
 const FavDataPath = path.join(rootDir, 'data', "favrouites.json");
 
@@ -21,6 +20,14 @@ module.exports = class Favrouites {
     static getFavrouites(callback) {
         fs.readFile(FavDataPath, (err, data) => {
             callback(!err ? JSON.parse(data) : []);
+        })
+    }
+
+
+    static deleteById(delHomeId, callback) {
+        Favrouites.getFavrouites(homeIds => {
+            homeIds = homeIds.filter(home => home.id !== delHomeId);
+            fs.writeFile(FavDataPath, JSON.stringify(homeIds), callback);    
         })
     }
 };

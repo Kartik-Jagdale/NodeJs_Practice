@@ -69,3 +69,11 @@ exports.postAddToFavrouites = (req, res, next) => {
         res.redirect("/favrouites");
     })
 }
+
+exports.postDeleteFromFavrouites = (req, res, next) => {
+   const homeId = req.params.homeId;
+   Favrouites.deleteById(homeId, error => {
+        console.log("error", error)
+   })
+   res.redirect("/favrouites")
+}
