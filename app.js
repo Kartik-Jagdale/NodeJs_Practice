@@ -4,8 +4,17 @@ const express = require("express");
 
 //local module
 const {hostRouter} = require("./routes/hostRouter");
-const rootDir = require("./utils/pathUtil");
 const storeRouter = require("./routes/stoerRouter");
+const rootDir = require("./utils/pathUtil");
+
+const db = require("./utils/databaseUtil");
+
+db.execute('select * from homes').then(([rows, fields]) => {
+    console.log('Getting from db', rows);
+})
+.catch(error => {
+    console.log("error", error);
+})
 
 const app = express();
 
