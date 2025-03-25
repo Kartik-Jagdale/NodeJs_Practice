@@ -26,7 +26,7 @@ module.exports = class Favrouites {
 
     static deleteById(delHomeId, callback) {
         Favrouites.getFavrouites(homeIds => {
-            homeIds = homeIds.filter(home => home.id !== delHomeId);
+            homeIds = homeIds.filter(home => home._id !== delHomeId);
             fs.writeFile(FavDataPath, JSON.stringify(homeIds), callback);    
         })
     }

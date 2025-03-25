@@ -8,13 +8,14 @@ const storeRouter = require("./routes/stoerRouter");
 const rootDir = require("./utils/pathUtil");
 
 const db = require("./utils/databaseUtil");
+const { mongoConnect }= require("./utils/databaseUtil");
 
-db.execute('select * from homes').then(([rows, fields]) => {
-    console.log('Getting from db', rows);
-})
-.catch(error => {
-    console.log("error", error);
-})
+// db.execute('select * from homes').then(([rows, fields]) => {
+//     console.log('Getting from db', rows);
+// })
+// .catch(error => {
+//     console.log("error", error);
+// })
 
 const app = express();
 
@@ -29,6 +30,9 @@ app.use("/host",hostRouter);
 app.use(express.static(path.join(rootDir,"public")));
 
 port = 3002;
-app.listen(port, ()=> {
-    console.log(`server running on http://localhost:${port}`)
+mongoConnect(client => {
+    console.log(client)
+    app.listen(port, ()=> {
+        console.log(`server running on http://localhost:${port}`)
+    })
 })
