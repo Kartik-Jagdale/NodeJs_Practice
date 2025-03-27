@@ -29,7 +29,7 @@ exports.getEditHome = (req, res, next) => {
 exports.postAddHome = (req, res, next) => {
   console.log('Home Registration successful for: ', req.body)
   const { houseName, price, location, rating, photoUrl } = req.body;
-  const home = new Home(houseName, price, location, rating, photoUrl);
+  const home = new Home({houseName, price, location, rating, photoUrl});
   home.save().then(()=>{
     console.log("home saved successfully")
   });
@@ -37,7 +37,7 @@ exports.postAddHome = (req, res, next) => {
 }
 
 exports.getHostHomes = (req, res, next) => {
-  Home.fetchAll().then(registeredHomes => {
+  Home.find().then(registeredHomes => {
     res.render("host/host-home-list", {
       registeredHomes: registeredHomes,
       pageTitle: "Host Homes List",
@@ -47,20 +47,28 @@ exports.getHostHomes = (req, res, next) => {
 };
 
 exports.postHostHome = (req, res, next) => {
-  const { _id, houseName, price, location, rating, photoUrl } = req.body;
-  const home = new Home(houseName, price, location, rating, photoUrl);
-  home._id = _id;
-  home.save();
-
+  const { id, houseName, price, location, rating, photoUrl } = req.body;
+  Home.findById(id).then((home) => {
+  home.houseName = houseName, 
+  home.price = price, 
+  home.location = location, 
+  home.rating = rating, 
+  home.photoUrl = photoUrl,
+  home.save().then((result) => {
+    console.log("home Updated", result);
+  }).catch(err => {
+    console.log("ERRORRRrr",err)
+  });
   res.redirect("/host/host-home-list");
-}
+  }).catch(err => {
+    console.log("error ",err)
+  });
+};
 
 exports.postDeleteHome = (req, res, next) => {
     const homeId = req.params.homeId;
     console.log(homeId);
-    Home.deleteById(homeId).then(() => {
+    Home.findByIdAndDelete(homeId).then(() => {
       res.redirect("/host/host-home-list");
-      const home = homes[0];
-      console.log("deleted", home)
     })
   }
